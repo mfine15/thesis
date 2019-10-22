@@ -1,0 +1,11 @@
+- Can we use this result on the left in place of the separator set
+  - Learning in Non-convex games with optimization oracle
+  - Can we use this bound to improve the Heuristics paper 
+    - How can they relate 
+  - Can we connect this to objective perturbation as a technique
+    - They require convex losses -- can we make this lipschitz
+    - Look at "efficient private erms for smooth objectives" , "non-convex erm papers"
+- Can we make a small neural netowork (of dimension $\log|Q|$)
+  - A single layer neural network with thresholding can represent all k-way marginals -- use this with chekhov gan 
+  - It's not necessarily clear how "non-convex game paper" relates to GANs -- the non-convex uses a specific algorithm to train
+- Relate mixture of discriminators to 

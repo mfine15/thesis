@@ -1,0 +1,25 @@
+- [ ] Many universities, companies, gov't agencies
+- [ ] Harvard Privacy Tools Project & OpenDP
+- [x] US Census Bureau
+- [x] Google
+- [x] Apple
+- [x] Facebook
+- [x] Microsoft
+- [x] LinkedIn
+- [x] IBM
+- [ ] Privitar
+- [ ] Privacy Dynamics
+- [ ] Uber
+- [ ] NIST
+- [ ] Tumult Labs
+- [ ] Oasis Labs
+- [ ] Leapyear
+- [ ] IAPP
+- [ ] UK Information Commissioner's Office
+- [ ] EFF
+- [ ] EPIC
+- [ ] European Data Protection Supervisor
+- [ ] Future of Privacy Forum
+- [ ] Center for Democracy and Technology
+- [x] Amazon
+- [x] DeepMind
