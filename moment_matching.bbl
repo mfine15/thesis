@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{GBR+12}
+Arthur Gretton, Karsten~M. Borgwardt, Malte~J. Rasch, Bernhard Sch{\"o}lkopf,
+  and Alexander~J. Smola.
+\newblock A {{Kernel Two}}-{{Sample Test}}.
+\newblock {\em J. Mach. Learn. Res.}, 13:723--773, 2012.
+
+\bibitem{PLA18}
+Mirko Polato, Ivano Lauriola, and Fabio Aiolli.
+\newblock A {{Novel Boolean Kernels Family}} for {{Categorical Data}}.
+\newblock {\em Entropy}, 20(6):444, June 2018.
+
+\end{thebibliography}

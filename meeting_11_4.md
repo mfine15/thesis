@@ -1,0 +1,4 @@
+- We could either track the total accuracy bounds, or just use sparse vector to report whether or not you've failed at each step
+  - thus, if we only care about the threshold in particular, we can use less privacy budget
+- Question of how to divide privacy budget between training and reporting
+  - 

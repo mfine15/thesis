@@ -21,12 +21,16 @@
 %\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
 
 \usepackage{fullpage}
+\usepackage[preprint]{neurips_2019}
+\usepackage{xcolor}
+ \pagecolor[RGB]{38,50,56} \color[RGB]{225,246,246}
 
-\newcommand{\eh}[1]{$\ll$\textsf{\color{blue} Elad : #1}$\gg$}
-\newcommand{\ag}[1]{$\ll$\textsf{\color{green} Alon : #1}$\gg$}
-\newcommand{\tp}[1]{$\ll$\textsf{\color{green} Typo : #1}$\gg$}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\B}{\{0,1\}}
 \newcommand{\ignore}[1]{}
-
+\newcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{{\color{red} TODO: {#1}}}
 
 
 
@@ -41,26 +45,101 @@
 \newtheorem{remark}{Remark}
 \newtheorem{assumption}{Assumption}
 
-\author{Michael Fine\footnote{Harvard College}}
+\author{%
+  Michael Fine
+  Harvard University\\
+  Cambridge MA, 02138 \\
+  \texttt{mfine@college.harvard.edu} 
+}
+\title{Principled Private Data Release with Deep Learning}
 
-\title{Verifiable Private Data Release with Generative Adversarial Networks}
 
 
 \begin{document}
 \maketitle
 
 
-\section{Introduction}
+
+\section{Background}
+
+\subsection{Query Release Problem}
+
+We study the problem of privately generating synthetic data to answer statistical queries over a data universe $\X$. Formally, a statistical query over $\X$ is a function $q: \X \to \B$. Given a a dataset $S \in \X^n$, we define $q(S) = \sum_{s\in S} q(s)$.
+
+Our goal is to produce a synthetic dataset that, for every query in some family of queries, takes approximately the same value as the true dataset.
+
+\begin{definition}{$\alpha-$approximate:}
+    We say a synthetic dataset $S$ $\alpha-$approximates a true dataset $\hat S$ w.r.t a family of statistical queries $\Q$ if
+
+    \begin{equation}
+        \forall q \in \Q: ~~~ |q(S) - q(\hat S)| \leq \alpha
+    \end{equation}
+\end{definition}
+
+[TODO finish up]
+
+\subsection{Game Theoretic Formulation}
+
+One can formulate the problem of producing an $\alpha-$approximate dataset as a two-player, zero sum game \cite{HRU13} between a discriminator $D$ and a generator $G$. The generator has an action set $\X$, while the discriminator has an action set $\Q$. The generator aims to output a dataset $S \in \X$ that maximally agrees with $\hat S$, while the discriminator aims to find queries $q \in \Q$ that distinguish $\hat S$ and $S$.
+
+Formally, given a play $S \in \X$ and $q \in Q$, the discriminator gets payoff $V(S,q)$ and the generator gets payoff $V(S,q)$, where $V(S,q)$ denotes:
+
+\begin{definition}{Payoff}
+    \begin{equation}
+        V(S,q) := |q(S) - q(\hat S)|
+    \end{equation}
+\end{definition}
+
+The goal of both $G$ and $D$ is to maximize their worst case payoffs, thus
+
+\begin{equation}
+    \max_{q \in \Q} \min_{S \in X} V(S,q) ~~ (\text{Goal of } D) ~~~~ and ~~~~ 
+    \min_{S \in X} \max_{q \in \Q} V(S,q) ~~ (\text{Goal of } G) 
+\end{equation}
+
+If there exists a point $(S^*, q^*)$ such that neither $G$ nor $D$ can improve their payoffs by playing a different move, we call that a \emph{Pure Nash Equilibrium}. Unfortunately, a pure equilibrium is not always guaranteed to exist (and likely does not in the case of synthetic data generation). 
+
+However, the seminal work of Nash et. al showed that there always exists a \emph{Mixed Nash Equilibrium (MNE)}, where the players play \emph{probability distributions} over their action sets, instead of fixed actions. 
+
+Let $\Delta(\X)$ and $\Delta(\Q)$ denote the set of probability distribution over $\X$ and $\Q$. Formally, if $G$ plays a strategy $u \in \Delta(\X)$ and $D$ plays  $w \in \Delta(\Q)$, we define the payoff to be the expected value of a single draw:
+
+\begin{equation}
+    V(u,w) := \mathbb{E}_{S \sim u, q \sim w} V(S,q)
+\end{equation}
+
+Thus, a pair of strategies $u^* \in \Delta(\X)$ and $w^* \in \Delta(\Q)$ forms an $\alpha-$approximate mixed nash equilibrium if for all strategies $u \in \Delta(\X)$ and $w \in \Delta(\Q)$
+
+\begin{equation}
+    V(u^*, w) \leq V(u,w) + \alpha ~~~~ and ~~~~ V(u, w^*) \leq V(u,w) - \alpha 
+\end{equation}
+
+Moreover, Gaboardi et. al showed how to reduce the problem of finding an $\alpha-$approximate dataset to the problem of finding an an $\alpha-$equilibrium in the query release game:
+
+\begin{theorem}
+    Let $(u,w)$ be the $\alpha-$approximate MNE in a query release game for a dataset $\hat S \in \X$ and a query universe $\Q$. If $\Q$ is closed under negation, then the dataset $S$ sampled from $u$ $\alpha$-approximates $\hat S$ over $Q$. \cite{GAH+14}
+\end{theorem}
+
+Hence, our task is to provide an algorithm to private reach an $\alpha-$MNE in the query release game. In the following section, we will provide the background for how this can be done with GANs.
+
+\subsection{Generative Adversarial Networks}
+
+Generative Adversarial Networks (GANs) \todo{}
 
 
+\subsection{Online Learning}
 
-\section{Previous Work}
+\todo{Freund and Shcapire}
+\todo{Convex Concave}
 
 \section{Results}
 
+    Unfortunately, the value of the game $V$ is not convex-concave, and therefore \todo{Theorem on no regret games solving convex concave} does not apply directly. However, Grnarova et al showed that when the discriminator $D$ is a single-layer neural network, $V$ becomes concave with respect to $D$, or \emph{semi-concave} \cite{GLL+17}. 
 
 
-- GAN query release 
+\begin{itemize}
+    \item Replace $D$ with multiplicative weights
+    \item Replace $D$ with 
+\end{itemize}
 
 
 \bibliographystyle{plain}

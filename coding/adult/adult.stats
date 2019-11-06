@@ -1,0 +1,19 @@
+===================================
+FIELDS
+===================================
+
+age: continuous.
+workclass: discrete (8 values).
+fnlwgt: continuous.
+education: discrete (16 values).
+education-num: continuous.
+marital-status: discrete (7 values).
+occupation: discrete (14 values).
+relationship: discrete (6 values).
+race: discrete (5 values).
+sex: discrete (2 values).
+capital-gain: continuous.
+capital-loss: continuous.
+hours-per-week: continuous.
+native-country: discrete (41 values).
+income: discrete (2 values).

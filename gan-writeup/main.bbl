@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{GAH+14}
+Marco Gaboardi, Emilio Jes{\'u}s~Gallego Arias, Justin Hsu, Aaron Roth, and
+  Zhiwei~Steven Wu.
+\newblock Dual {{Query}}: {{Practical Private Query Release}} for {{High
+  Dimensional Data}}.
+\newblock {\em arXiv:1402.1526 [cs]}, February 2014.
+
+\bibitem{GLL+17}
+Paulina Grnarova, Kfir~Y. Levy, Aurelien Lucchi, Thomas Hofmann, and Andreas
+  Krause.
+\newblock An {{Online Learning Approach}} to {{Generative Adversarial
+  Networks}}.
+\newblock {\em arXiv:1706.03269 [cs, stat]}, June 2017.
+
+\bibitem{HRU13}
+Justin Hsu, Aaron Roth, and Jonathan Ullman.
+\newblock Differential {{Privacy}} for the {{Analyst}} via {{Private
+  Equilibrium Computation}}.
+\newblock {\em Proceedings of the 45th annual ACM symposium on Symposium on
+  theory of computing - STOC '13}, page 341, 2013.
+
+\end{thebibliography}

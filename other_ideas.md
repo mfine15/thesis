@@ -7,3 +7,7 @@ Question is
 
 **NB:** DualQuery relies on the data player playing the ~worst~ performing record -- this relies on finding the best performing record
 
+
+
+- Multiplicative weights on autoencoded data
+- 
