@@ -15,7 +15,7 @@
 
 
 
-### Query Release Game
+#### Query Release Game
 
 Suppose we want to generate synthetic data for a dataset $T$ to approximately answer a set of queries $\mathcal{Q}$. We can view this as a zero-sum game between a discriminator $D$ and a generator $G$. The generator aims to output a dataset $X$ that maximally agrees with $\hat X$, while the discriminator aims to find queries that distinguish $X$ and $\hat X$. 
 

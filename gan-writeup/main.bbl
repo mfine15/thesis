@@ -1,5 +1,16 @@
 \begin{thebibliography}{1}
 
+\bibitem{AGH18}
+Naman Agarwal, Alon Gonen, and Elad Hazan.
+\newblock Learning in {{Non}}-convex {{Games}} with an {{Optimization Oracle}}.
+\newblock {\em arXiv:1810.07362 [cs, stat]}, October 2018.
+
+\bibitem{CHM+14}
+Anna Choromanska, Mikael Henaff, Michael Mathieu, G{\'e}rard~Ben Arous, and
+  Yann LeCun.
+\newblock The {{Loss Surfaces}} of {{Multilayer Networks}}.
+\newblock {\em arXiv:1412.0233 [cs]}, November 2014.
+
 \bibitem{GAH+14}
 Marco Gaboardi, Emilio Jes{\'u}s~Gallego Arias, Justin Hsu, Aaron Roth, and
   Zhiwei~Steven Wu.
@@ -7,12 +18,10 @@ Marco Gaboardi, Emilio Jes{\'u}s~Gallego Arias, Justin Hsu, Aaron Roth, and
   Dimensional Data}}.
 \newblock {\em arXiv:1402.1526 [cs]}, February 2014.
 
-\bibitem{GLL+17}
-Paulina Grnarova, Kfir~Y. Levy, Aurelien Lucchi, Thomas Hofmann, and Andreas
-  Krause.
-\newblock An {{Online Learning Approach}} to {{Generative Adversarial
-  Networks}}.
-\newblock {\em arXiv:1706.03269 [cs, stat]}, June 2017.
+\bibitem{Haz19}
+Elad Hazan.
+\newblock Introduction to {{Online Convex Optimization}}.
+\newblock {\em arXiv:1909.05207 [cs, math, stat]}, September 2019.
 
 \bibitem{HRU13}
 Justin Hsu, Aaron Roth, and Jonathan Ullman.

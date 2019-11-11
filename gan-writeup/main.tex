@@ -9,8 +9,9 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+
+\usepackage[ruled,vlined]{algorithm2e}
+
 \usepackage{url}
 \usepackage{enumerate}
 \usepackage{amsfonts}
@@ -27,6 +28,7 @@
 
 \newcommand{\X}{\mathcal{X}}
 \newcommand{\Q}{\mathcal{Q}}
+\newcommand{\Oracle}{\mathcal{O}}
 \newcommand{\B}{\{0,1\}}
 \newcommand{\ignore}[1]{}
 \newcommand{\todo}[1]{}
@@ -68,7 +70,7 @@ We study the problem of privately generating synthetic data to answer statistica
 
 Our goal is to produce a synthetic dataset that, for every query in some family of queries, takes approximately the same value as the true dataset.
 
-\begin{definition}{$\alpha-$approximate:}
+\begin{definition}[$\alpha-$approximate]
     We say a synthetic dataset $S$ $\alpha-$approximates a true dataset $\hat S$ w.r.t a family of statistical queries $\Q$ if
 
     \begin{equation}
@@ -84,7 +86,7 @@ One can formulate the problem of producing an $\alpha-$approximate dataset as a 
 
 Formally, given a play $S \in \X$ and $q \in Q$, the discriminator gets payoff $V(S,q)$ and the generator gets payoff $V(S,q)$, where $V(S,q)$ denotes:
 
-\begin{definition}{Payoff}
+\begin{definition}[Payoff]
     \begin{equation}
         V(S,q) := |q(S) - q(\hat S)|
     \end{equation}
@@ -121,6 +123,8 @@ Moreover, Gaboardi et. al showed how to reduce the problem of finding an $\alpha
 
 Hence, our task is to provide an algorithm to private reach an $\alpha-$MNE in the query release game. In the following section, we will provide the background for how this can be done with GANs.
 
+
+
 \subsection{Generative Adversarial Networks}
 
 Generative Adversarial Networks (GANs) \todo{}
@@ -128,13 +132,110 @@ Generative Adversarial Networks (GANs) \todo{}
 
 \subsection{Online Learning}
 
-\todo{Freund and Shcapire}
-\todo{Convex Concave}
+To efficiently find equilibrium in the zero-sum GAN game, we draw on results from online learning. In the online learning setting, in each of $T$ rounds a player is given a loss function $f_t$ , possibly adversarial chosen. The players goal is to chose an action $x_{t+1} \in \mathcal{X}$ in order to minimize the cumulative $\emph{regret}$. 
+
+\begin{definition}[Regret]
+    The regret measures the cumulative loss of the player, compared to the best fixed decision in hindsight. 
+
+    \begin{equation}
+        \text{Regret}_T(f_1,...,f_T) = \sum_{t=1}^T f_t(x_t) - min_{x^* \in \mathcal{X}} \sum_{t=1}^T f_t(x^*)
+    \end{equation}
+\end{definition}
+
+When a strategy provably leads to regret is sublinear in $T$, we call that \emph{no-regret}, as regret $\to 0$ as $T \to \infty$.
+
+One approach to regret minimization is to choose the action $x_{t+1}$ that minimizes the cumulative loss over all past loss functions
+\begin{equation}
+    x_{t+1} = \arg\min_{x \in \X} \sum_{t=1}^T
+\end{equation}
+This approach is known as \emph{Follow-The-Leader}. While natural, this approach is easily exploitable by an adversary. At a high level, this is because it \emph{overfits} to past outcomes, allowing it to optimize between suboptimal strategies. To rectify this, a powerful strategy is \emph{Follow-the-Regularized-Leader}
+
+\begin{definition}[Follow-The-Reguralized-Leader (FTRL)]
+    Given a reguralization function $R(x)$ and a regularization weight $\eta_T$, at each step choose $x_{t+1} \in \X$ to minimize the regularized cumulative loss:
+
+    \begin{equation}
+        x_{t+1} = \arg\min_{x \in \X} \sum_{t=1}^T + \eta_T R(X)
+    \end{equation}
+
+    One common regularization function is the $l_2$ norm $R(x) = ||x||_2$.  
+\end{definition}
+
+When the loss function $f_T$ is convex, FTRL can be shown to be no-regret \cite{Haz19}. Unfortunately, in the GAN setting, where the loss function $f_T$ is defined by a highly non-convex deep network, we don't have that guarantee. 
+
+\subsubsection{Online Learning for Non-convex losses}
+In general, finding the minimum of a sum of non-convex functions is hard. However, in practice gradient descent over neural networks has proven to be remarkably effective at approximately solving non-convex loss functions. This leads to the natural question: assuming we have an offline non-convex optimization oracle $\mathcal{O}$, can we use that to find a no-regret strategy in the online setting? Agarwal et al showed that we can, using a Follow-The-Leader variant known as Follow-The-Perturbed-Leader \cite{AGH18}. Formally:
+
+\begin{definition}[Offline optimization oracle]
+    Let $\mathcal{O}$ take a sequence of (possibly non-convex) loss functions $(f_1...f_T) \in \mathcal{L}^T$ and a d-dimensional vector $d$, and output $x^* \in \X$
+    \begin{equation}
+        x^* \in \arg\min_{x \in \X} \sum_{t=1}^Tf_t + \sigma^Tx
+    \end{equation}
+\end{definition}
+
+We can use this offline oracle $\mathcal{O}$ to minimize regret in the online case:
+
+\begin{definition}[Follow-The-Perturbed-Leader (FTPL)]
+    Given an offline oracle $\mathcal{O}$ and a parameter $\eta$, at each step $t$ FTPL draws a random vector $\sigma_t \sim Exp(\eta)^d$. It then outputs 
+    \begin{equation}
+        x^* \in \arg\min_{x \in \X} \sum_{t=1}^Tf_t + \sigma^Tx
+    \end{equation}
+\end{definition}
+
+\begin{theorem}
+    FTPL has sublinear regret. \cite{AGH18}
+\end{theorem}
+
+Building on the work of Freund and Schapire, we can show that if $G$ and $D$ both play FTPL for $T$ rounds, they will converge to an $\alpha-$approximate equilibrium. Formally:
+
+\begin{theorem}\label{ftpl-equilibriu}
+    Suppose that $G$ and $D$ play according to FTPL. We can choose $T \in poly(d)/\alpha^3$ such that the expected average regret of FTPL is at most $\alpha$. Then, $G_T$ and $D_T$ produce strategies in an $\alpha-$approximate equilibrium \cite{AGH18}.
+\end{theorem}
 
 \section{Results}
+\todo{summarize approach}
+Theorem 3 requires the existence of an actual oracle $\mathcal{O}$ that can find the minimum of a perturbed sum of non-convex functions. In this case, we need an oracle that can minimize the sub of deep neural networks. While SGD is remarkably effective in practice, we are unable to provide guarantees (probabilistic or otherwise) about how close the convergent solution SGD outputs is to the global minima. Recent work suggests that this is not a problem in practice, as spurious local minima (local minima significantly worse than the global minima) get exponentially rarer as the network gets larger \cite{CHM+14}. However, these results still rely on too many impractical assumptions to make them relevant in practice. 
 
-    Unfortunately, the value of the game $V$ is not convex-concave, and therefore \todo{Theorem on no regret games solving convex concave} does not apply directly. However, Grnarova et al showed that when the discriminator $D$ is a single-layer neural network, $V$ becomes concave with respect to $D$, or \emph{semi-concave} \cite{GLL+17}. 
+However, while we cannot guarantee (or even certify) convergence to an approximate global minima in general, we can take advantage of the specific structure of the query release problem. In the query release problem (unlike most deep learning problems) we know \emph{exactly} what the global minima of loss for the generator is: 1/2 -- the loss from outputting the true, sensitive dataset. \todo{prove this}.
 
+We can use this to track the regret bounds \todo{Explain this better in prose}
+
+\begin{algorithm}[H]
+    \KwIn{one-layer discriminator $D_\theta$, deep generator $G_\phi$, offline optimization oracle $\mathcal{O}$, Rounds $T$, noise $\eta$, output dimension $d$, game objective $M$}
+    \KwResult{Trained generator $G_T$, Accuracy $\alpha$}
+    \caption{QueryGAN}
+    \For{$t \in 1...T$}{
+        Draw discriminator and generator perturbations \\
+        $\sigma_1 \sim Exp(\eta)^d ~~ and ~~ \sigma_2 \sim Exp(\eta)^d$ \\~\\
+
+        Update D and G according to FTPL: \\
+        $\theta_{t+1} \leftarrow \theta_t - \nabla_{\theta_t}\left( \sum_{t=1}^T f_t + \sigma_1^Tx \right) ~~~ \text{and} ~~~ \phi_{t+1} \leftarrow \phi_t - \nabla_{\phi_t}\left(\sum_{t=1}^T g_t + \sigma_2^Tx \right)$ \\~\\
+
+        Update losses:\\
+        $f_{t+1}(\cdot) = M(\cdot, D_{\phi_{t+1}}) ~~~ and ~~~ g_{t+1}(\cdot) = M(D_{\phi_{t+1}}, \cdot)$ \\~\\
+
+        Store generator loss:
+
+        $\alpha_{t+1} \leftarrow f_{t+1}(G_{\phi_{t+1}}) - 1/2$ 
+    }
+
+    \Return{Mixed strategy: $G \sim Unif\{G_{\theta_1}, G_{\theta_T}\}$, Regret: $\sum_{t \in T} \alpha_T$}
+
+\end{algorithm}
+
+\begin{theorem}
+    Let $G, \alpha$ be the results of running QueryGAN with inputs \todo{What inputs}. Let $x$ be the dataset sampled from $G$
+
+    \begin{equation}
+        x := \{G(z_1),...,G(z_n)\} ~~~ \text{where } z \sim P_z^n
+    \end{equation}\todo{what is $P_z$}
+
+    Then $x$ is $\alpha-$approximate with respect to all queries representable by $D$.
+\end{theorem}
+
+
+
+
+% Unfortunately, the value of the game $V$ is not convex-concave, and therefore \todo{Theorem on no regret games solving convex concave} does not apply directly. However, Grnarova et al showed that when the discriminator $D$ is a single-layer neural network, $V$ becomes concave with respect to $D$, or \emph{semi-concave} \cite{GLL+17}. 
 
 \begin{itemize}
     \item Replace $D$ with multiplicative weights
