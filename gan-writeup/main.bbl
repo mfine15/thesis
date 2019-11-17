@@ -11,12 +11,31 @@ Anna Choromanska, Mikael Henaff, Michael Mathieu, G{\'e}rard~Ben Arous, and
 \newblock The {{Loss Surfaces}} of {{Multilayer Networks}}.
 \newblock {\em arXiv:1412.0233 [cs]}, November 2014.
 
+\bibitem{DR13}
+Cynthia Dwork and Aaron Roth.
+\newblock The {{Algorithmic Foundations}} of {{Differential Privacy}}.
+\newblock {\em Foundations and Trends\textregistered{} in Theoretical Computer
+  Science}, 9(3-4):211--407, 2013.
+
 \bibitem{GAH+14}
 Marco Gaboardi, Emilio Jes{\'u}s~Gallego Arias, Justin Hsu, Aaron Roth, and
   Zhiwei~Steven Wu.
 \newblock Dual {{Query}}: {{Practical Private Query Release}} for {{High
   Dimensional Data}}.
 \newblock {\em arXiv:1402.1526 [cs]}, February 2014.
+
+\bibitem{GHM19}
+Alon Gonen, Elad Hazan, and Shay Moran.
+\newblock Private {{Learning Implies Online Learning}}: {{An Efficient
+  Reduction}}.
+\newblock {\em arXiv:1905.11311 [cs, stat]}, May 2019.
+
+\bibitem{GLL+17}
+Paulina Grnarova, Kfir~Y. Levy, Aurelien Lucchi, Thomas Hofmann, and Andreas
+  Krause.
+\newblock An {{Online Learning Approach}} to {{Generative Adversarial
+  Networks}}.
+\newblock {\em arXiv:1706.03269 [cs, stat]}, June 2017.
 
 \bibitem{Haz19}
 Elad Hazan.
@@ -29,5 +48,11 @@ Justin Hsu, Aaron Roth, and Jonathan Ullman.
   Equilibrium Computation}}.
 \newblock {\em Proceedings of the 45th annual ACM symposium on Symposium on
   theory of computing - STOC '13}, page 341, 2013.
+
+\bibitem{NRVW19}
+Seth Neel, Aaron Roth, Giuseppe Vietri, and Zhiwei~Steven Wu.
+\newblock Differentially {{Private Objective Perturbation}}: {{Beyond
+  Smoothness}} and {{Convexity}}.
+\newblock {\em arXiv:1909.01783 [cs, stat]}, September 2019.
 
 \end{thebibliography}
