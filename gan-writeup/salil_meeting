@@ -1,0 +1,18 @@
+- Bun-Nissim-Stemm
+
+
+- The query class is the only thing that imposes the underlying metric space structure
+    - Not necessarily a meaningful distance relation between datapoints otherwise
+- This final wasserstein 
+
+
+- Explain how the GAN literature got to the formulation of one lipschitz wasserstein distance
+- but its not clear that that's actually the most relevant constraint for our query class
+- ultimate goal: find a way of constraining discriminators that makes gan objective easy to train while still looking a lot like the query class
+
+
+
+- 
+- Uniform sampling bounds 
+
+- reach out to stephen

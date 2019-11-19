@@ -1,0 +1,124 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{NRVW19}
+
+\bibitem[ACB17]{ACB17}
+Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
+\newblock Wasserstein {{GAN}}.
+\newblock January 2017.
+
+\bibitem[AGH18]{AGH18}
+Naman Agarwal, Alon Gonen, and Elad Hazan.
+\newblock Learning in {{Non}}-convex {{Games}} with an {{Optimization Oracle}}.
+\newblock {\em arXiv:1810.07362 [cs, stat]}, October 2018.
+
+\bibitem[CHM{\etalchar{+}}14]{CHM+14}
+Anna Choromanska, Mikael Henaff, Michael Mathieu, G{\'e}rard~Ben Arous, and
+  Yann LeCun.
+\newblock The {{Loss Surfaces}} of {{Multilayer Networks}}.
+\newblock {\em arXiv:1412.0233 [cs]}, November 2014.
+
+\bibitem[DR13]{DR13}
+Cynthia Dwork and Aaron Roth.
+\newblock The {{Algorithmic Foundations}} of {{Differential Privacy}}.
+\newblock {\em Foundations and Trends\textregistered{} in Theoretical Computer
+  Science}, 9(3-4):211--407, 2013.
+
+\bibitem[GAH{\etalchar{+}}14]{GAH+14}
+Marco Gaboardi, Emilio Jes{\'u}s~Gallego Arias, Justin Hsu, Aaron Roth, and
+  Zhiwei~Steven Wu.
+\newblock Dual {{Query}}: {{Practical Private Query Release}} for {{High
+  Dimensional Data}}.
+\newblock {\em arXiv:1402.1526 [cs]}, February 2014.
+
+\bibitem[GHM19]{GHM19}
+Alon Gonen, Elad Hazan, and Shay Moran.
+\newblock Private {{Learning Implies Online Learning}}: {{An Efficient
+  Reduction}}.
+\newblock {\em arXiv:1905.11311 [cs, stat]}, May 2019.
+
+\bibitem[GLL{\etalchar{+}}17]{GLL+17}
+Paulina Grnarova, Kfir~Y. Levy, Aurelien Lucchi, Thomas Hofmann, and Andreas
+  Krause.
+\newblock An {{Online Learning Approach}} to {{Generative Adversarial
+  Networks}}.
+\newblock {\em arXiv:1706.03269 [cs, stat]}, June 2017.
+
+\bibitem[GPM{\etalchar{+}}14]{GPM+14}
+Ian Goodfellow, Jean {Pouget-Abadie}, Mehdi Mirza, Bing Xu, David
+  {Warde-Farley}, Sherjil Ozair, Aaron Courville, and Yoshua Bengio.
+\newblock Generative {{Adversarial Nets}}.
+\newblock In Z.~Ghahramani, M.~Welling, C.~Cortes, N.~D. Lawrence, and K.~Q.
+  Weinberger, editors, {\em Advances in {{Neural Information Processing
+  Systems}} 27}, pages 2672--2680. {Curran Associates, Inc.}, 2014.
+
+\bibitem[Haz19]{Haz19}
+Elad Hazan.
+\newblock Introduction to {{Online Convex Optimization}}.
+\newblock {\em arXiv:1909.05207 [cs, math, stat]}, September 2019.
+
+\bibitem[HLM12]{HLM12}
+Moritz Hardt, Katrina Ligett, and Frank Mcsherry.
+\newblock A {{Simple}} and {{Practical Algorithm}} for {{Differentially Private
+  Data Release}}.
+\newblock In F.~Pereira, C.~J.~C. Burges, L.~Bottou, and K.~Q. Weinberger,
+  editors, {\em Advances in {{Neural Information Processing Systems}} 25},
+  pages 2339--2347. {Curran Associates, Inc.}, 2012.
+
+\bibitem[HR10]{HR10}
+M.~Hardt and G.~N. Rothblum.
+\newblock A {{Multiplicative Weights Mechanism}} for {{Privacy}}-{{Preserving
+  Data Analysis}}.
+\newblock In {\em 2010 {{IEEE}} 51st {{Annual Symposium}} on {{Foundations}} of
+  {{Computer Science}}}, pages 61--70, October 2010.
+
+\bibitem[HRU13]{HRU13}
+Justin Hsu, Aaron Roth, and Jonathan Ullman.
+\newblock Differential {{Privacy}} for the {{Analyst}} via {{Private
+  Equilibrium Computation}}.
+\newblock {\em Proceedings of the 45th annual ACM symposium on Symposium on
+  theory of computing - STOC '13}, page 341, 2013.
+
+\bibitem[JY19]{JY19}
+James Jordon and Jinsung Yoon.
+\newblock {{PATE}}-{{GAN}}: {{GENERATING SYNTHETIC DATA WITH DIFFERENTIAL
+  PRIVACY GUARANTEES}}.
+\newblock page~21, 2019.
+
+\bibitem[LSZ15]{LSZ15a}
+Yujia Li, Kevin Swersky, and Richard Zemel.
+\newblock Generative {{Moment Matching Networks}}.
+\newblock {\em arXiv:1502.02761 [cs, stat]}, February 2015.
+
+\bibitem[M{\"u}l97]{Mul97}
+Alfred M{\"u}ller.
+\newblock Integral {{Probability Metrics}} and {{Their Generating Classes}} of
+  {{Functions}}.
+\newblock {\em Advances in Applied Probability}, 29(2):429--443, 1997.
+
+\bibitem[NRVW19]{NRVW19}
+Seth Neel, Aaron Roth, Giuseppe Vietri, and Zhiwei~Steven Wu.
+\newblock Differentially {{Private Objective Perturbation}}: {{Beyond
+  Smoothness}} and {{Convexity}}.
+\newblock {\em arXiv:1909.01783 [cs, stat]}, September 2019.
+
+\bibitem[NRW18]{NRW18}
+Seth Neel, Aaron Roth, and Zhiwei~Steven Wu.
+\newblock How to {{Use Heuristics}} for {{Differential Privacy}}.
+\newblock {\em arXiv:1811.07765 [cs, stat]}, November 2018.
+
+\bibitem[Vil08]{Vil08}
+C{\'e}dric Villani.
+\newblock {\em Optimal Transport: Old and New}, volume 338.
+\newblock {Springer Science \& Business Media}, 2008.
+
+\bibitem[ZML17]{ZML17}
+Junbo Zhao, Michael Mathieu, and Yann LeCun.
+\newblock Energy-based {{Generative Adversarial Network}}.
+\newblock {\em arXiv:1609.03126 [cs, stat]}, March 2017.
+
+\bibitem[zot]{zotero-1283}
+Two-{{Sample Tests}}, {{Integral Probability Metrics}}, and {{GAN Objectives}}.
+\newblock
+  http://www.gatsby.ucl.ac.uk/\textasciitilde{}dougals/slides/dali/\#/63.
+
+\end{thebibliography}
