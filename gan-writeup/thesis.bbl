@@ -111,6 +111,11 @@ Seth Neel, Aaron Roth, and Zhiwei~Steven Wu.
 \newblock How to {{Use Heuristics}} for {{Differential Privacy}}.
 \newblock {\em arXiv:1811.07765 [cs, stat]}, November 2018.
 
+\bibitem[SC]{SC}
+John {Shawe-Taylor} and Nello Cristianini.
+\newblock Kernel {{Methods}} for {{Pattern Analysis}}.
+\newblock page 478.
+
 \bibitem[Vil08]{Vil08}
 C{\'e}dric Villani.
 \newblock {\em Optimal Transport: Old and New}, volume 338.

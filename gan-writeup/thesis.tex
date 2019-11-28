@@ -277,10 +277,10 @@ However, \cite{ACB17} showed that this cost function $V_{gan}$ is not sensible c
 Note the remarkable similarity of the GAN objective $V_{gan}$ to the earlier query release objective $V$. Recall that the mixed strategy $V$ is defined as \footnote{Note that we are able to drop the absolute value sign because by assumption $q$ is closed under negation}
 
 \begin{align*}
-    \min_{\p_g \in \nabla \X} \max_{\p_q \in \nabla\Q }V(g,d) &= \E_{x \sim \p_g}[q(x)] - \E_{x \sim \p_{data}}[q(x)]
-\end{align*} \todo{Query player still doesn't work there (?)} \todo{}
+    \min_{\p_g \in \nabla \X} \max_{\p_q \in \nabla\Q }V(g,d) &= |\E_{x \sim \p_g}[q(x)] - \E_{x \sim \p_{data}}[q(x)]|
+\end{align*}
 
-Thus, achieving equilibrium in the Wasserstein GAN is equivalent to solving the query release problem, for all queries representable by the discriminator. Importantly, for the Wasserstein GAN this limits us to all queries that are $1$-Lipschitz over each row of the output. In this context, that may prove to be infeasibly limiting. \todo{Explain why this works for images but not for queries}.
+Assuming that the class of queries $\Q$ is closed under negation, the absolute value can be dropped, and we recover the exact Wasserstein formulation. Thus, achieving equilibrium in the Wasserstein GAN is equivalent to solving the query release problem, for all queries representable by the discriminator. Importantly, for the Wasserstein GAN this limits us to all queries that are $1$-Lipschitz over each row of the output. In this context, that may prove to be infeasibly limiting. \todo{Explain why this works for images but not for queries}.
 
 \todo{Segue}
 
@@ -321,20 +321,31 @@ For some Reproducing Kernel Hilbert Space $\mathcal{H}$ for a kernel $k(\cdot,\c
     &= \alpha^TK\alpha
 \end{align*}
 
-where the last equality follows from the fact that all kernel matrices are positive semidefinite.
+where the last equality follows from the fact that all kernel matrices are positive semidefinite. The next question to ask is what is an appropriate choice of RKHS $\mathcal{H}$? \todo{More depth}
 
-Consider the Boolean kernel:
 
-\begin{definition}[Boolean Kernel]
-    The boolean kernel $k_d(\cdot, \cdot)$ is the kernel corresponding to all monotone monomials of length 
-    up to $d$, compux   ted by
+Consider the all-subsets kernel over a vector $x \in \B^n$, which has a feature $\phi_A$ for each product of a subset $A \subseteq \{1,2..,n\}$. 
+
+\begin{definition}[All subsets Kernel(\cite{SC})]
+    The all-subsets kernel $\phi_A$ is defined by the embedding
     
     \begin{equation}
-        k_d(x, x') = (1+b)^{\langle x, x' \rangle}
+        \phi : x \to (\phi_A(x))_{A \subseteq \{1,2..,n\}}
     \end{equation}
 
-    where $b$ determines the weight assigned to higher order polynomials. \todo{cite, also explain this much better}
+    with the corresponding kernel $k_\subseteq(x,z)$ given by
+    
+    \begin{equation}
+        k_\subseteq(x,z) = \langle \phi(x), \phi(z) \rangle 
+    \end{equation}
+    
+    $k_\subseteq$ can be efficiently computed by
+
+    \begin{equation}
+        k_\subseteq(x,z) = \prod_{i=1}^n (1 + x_iz_i)
+    \end{equation}
 \end{definition}
+
 
 \section{QueryGAN}
 \todo{summarize approach}
@@ -360,8 +371,8 @@ This gives us a way to track \emph{generator} optimality, assuming the discrimin
 However, if we restrict the class of discriminators to single layer neural networks parametrized by $\theta$:
 
 \begin{equation}
-    D_\theta(x) = \sigma(\theta^Tx + b)
-\end{equation}
+    D_\theta(x) = \sigma(\theta^Tx + b) 
+\end{equation}\todo{Don't reuse $\sigma$ for threshold fn and perturbation}
 
 then $V(G, D_\theta)$ becomes convex with respect to $\theta$, and we can use standard gradient descent methods to guarantee convergence to a global optimum. \todo{Prove gradient descent bounds}
 
@@ -446,6 +457,9 @@ Note that the Laplace mechanism can be seen as the symmetric form of the exponen
 \todo{use \cite{NRVW19} to show privacy}
 
 \subsubsection{Tracking privacy loss with moments accountant}
+
+
+
 \todo{Also watch out -- if we rely on a fixed $T$, what if privacy budget is exceeded before we reach it?}
 
 \subsubsection{Reporting Regret Bounds}
