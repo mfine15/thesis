@@ -73,8 +73,8 @@
 
 \begin{document}
 \maketitle
-\setcounter{tocdepth}{2}
-\tableofcontents
+% \setcounter{tocdepth}{2}
+% \tableofcontents
 
 \section{Introduction}
 
@@ -87,6 +87,7 @@
     \item \cite{NRW18}
     \item \cite{GAH+14}
     \item \cite{HLM12}
+    \item \cite{GXC+18}
 \end{itemize}
 \section{Background}
 \subsection{Differential Privacy}
@@ -273,13 +274,13 @@ However, \cite{ACB17} showed that this cost function $V_{gan}$ is not sensible c
     In the Wasserstein GAN, the discriminator is no longer guaranteed to output values in $[0,1]$, and therefore cannot be interpreted as a probability. For this reason, the Wasserstein discriminator is typically called a \emph{critic}. \todo{Elaborate, maybe cite}. 
 \end{remark}
 
-Note the remarkable similarity of the GAN objective $V_{gan}$ to the earlier query release objective $V$. Recall that the mixed strategy $V$ is defined as 
+Note the remarkable similarity of the GAN objective $V_{gan}$ to the earlier query release objective $V$. Recall that the mixed strategy $V$ is defined as \footnote{Note that we are able to drop the absolute value sign because by assumption $q$ is closed under negation}
 
 \begin{align*}
     \min_{\p_g \in \nabla \X} \max_{\p_q \in \nabla\Q }V(g,d) &= \E_{x \sim \p_g}[q(x)] - \E_{x \sim \p_{data}}[q(x)]
-\end{align*} \todo{Query player still doesn't work there}
+\end{align*} \todo{Query player still doesn't work there (?)} \todo{}
 
-Thus, achieving equilibrium in the Wasserstein GAN is equivalent to solving the query release problem, for all queries representable by the discriminator. Importantly, for the Wasserstein GAN this limits us to all queries that are $1-Lipschitz$ over each row of the output. In this context, that may prove to be infeasibly limiting. \todo{Explain why this works for images but not for queries}.
+Thus, achieving equilibrium in the Wasserstein GAN is equivalent to solving the query release problem, for all queries representable by the discriminator. Importantly, for the Wasserstein GAN this limits us to all queries that are $1$-Lipschitz over each row of the output. In this context, that may prove to be infeasibly limiting. \todo{Explain why this works for images but not for queries}.
 
 \todo{Segue}
 
@@ -297,7 +298,7 @@ Many GAN variants can be understood as minimizing the distance between the two d
     where $\F$ is some class of real-valued bounded measurable functions.
 \end{definition}
 
-Depending on how we constrain $\mathcal{F}$, we can recover a number of GAN architectures \cite{zotero-1283}: \todo{Explain why we need to constrain at all}
+The boundedness criteria is especially important, for if $f$ is unbounded the objective $\sup_f$ will scale $f$ to be arbritrarily large. Depending on how we constrain $\mathcal{F}$, we can recover a number of GAN architectures \cite{zotero-1283}: 
 
 \begin{itemize}
     \item $\F = \{f: \|f\|_L \leq 1\}$ gives us Wasserstein GAN \cite{ACB17}
@@ -305,8 +306,36 @@ Depending on how we constrain $\mathcal{F}$, we can recover a number of GAN arch
     \item $\F = \{f: \|f\|_\mathcal{H} \leq 1 \}$ for some RKHS $\mathcal{H}$  gives us Maximum Mean Discrepancy, as seen in GMMN \cite{LSZ15a}
 \end{itemize}
 
-Our aim is to choose an $\F$ (possibly specific to each set of queries) that contains most queries of interest, while still allowing for easy GAN training.  
+In practice, most GAN literature approximates these function class $\mathcal{F}$ through deep neural networks, rather than optimizing over all possible functions. Our aim is to choose an $\F$ (possibly specific to each set of queries) that contains most queries of interest, while still allowing for easy GAN training. 
+
+\subsubsection{Moment Matching in an RKHS}
+
+What functions satisfy the MMD IPM class  $\F = \{f \in \mathcal{H}: \|f\|_\mathcal{H} \leq 1 \}$? 
+
+For some Reproducing Kernel Hilbert Space $\mathcal{H}$ for a kernel $k(\cdot,\cdot)$, the norm of a function $f \in \mathcal{H}$ is defined as 
+
+\begin{align*}
+    \| f \|^2_\mathcal{H} &:= \langle f, f \rangle _\mathcal{H}  \\
+    &= \left \langle \sum_{i=1}^n \alpha_i \phi(x_i) , \sum_{i=1}^n \alpha_i \phi(x_i)   \right\rangle  _\mathcal{H} \\
+    &= \sum_{i=1}^n \sum_{j=1}^n \alpha_i^2 k(x_i, x_j) \\
+    &= \alpha^TK\alpha
+\end{align*}
+
+where the last equality follows from the fact that all kernel matrices are positive semidefinite.
+
+Consider the Boolean kernel:
+
+\begin{definition}[Boolean Kernel]
+    The boolean kernel $k_d(\cdot, \cdot)$ is the kernel corresponding to all monotone monomials of length 
+    up to $d$, compux   ted by
     
+    \begin{equation}
+        k_d(x, x') = (1+b)^{\langle x, x' \rangle}
+    \end{equation}
+
+    where $b$ determines the weight assigned to higher order polynomials. \todo{cite, also explain this much better}
+\end{definition}
+
 \section{QueryGAN}
 \todo{summarize approach}
 
@@ -352,7 +381,7 @@ At each round, we update $D$ and $G$ accoring to gradient descent over FTPL. For
         $\sigma_1\sim Exp(\eta)^d ~~ and ~~ \sigma_2 \sim Exp(\eta)^d$ \\~\\
 
         Update D and G with their respective oracles: \\
-        $\theta_{t+1} \leftarrow \mathcal{O}_d(\theta_t, f_{0:t}) ~~~ \text{and} ~~~ \phi_{t+1} \leftarrow \mathcal{O}_d(\phi_t, g_{0:t})$ \\~\\
+        $\theta_{t+1} \leftarrow \mathcal{O}_d(\theta_t, f_{0:t}) ~~~ \text{and} ~~~ \phi_{t+1} \leftarrow \mathcal{O}_g(\phi_t, g_{0:t})$ \\~\\
 
         Update losses:\\
         $f_{t+1}(\cdot) = V(\cdot, D_{\phi_{t+1}}) ~~~ and ~~~ g_{t+1}(\cdot) = V(G_{\theta_{t+1}}, \cdot)$ \\~\\
@@ -369,7 +398,7 @@ At each round, we update $D$ and $G$ accoring to gradient descent over FTPL. For
     }~\\
 
 
-    \Return{Dataset ${x_1,...,x_N}$, Regret: $R$}
+    \Return{\text{Dataset} $\{x_1,...,x_N\}$, Regret: $R$}
     
 
 \end{algorithm}
@@ -485,19 +514,44 @@ The proof of this theorem follows directly from \autoref{thm: QueryGAN-Approx} a
 
 % Unfortunately, the value of the game $V$ is not convex-concave, and therefore \todo{Theorem on no regret games solving convex concave} does not apply directly. However, Grnarova et al showed that when the discriminator $D$ is a single-layer neural network, $V$ becomes concave with respect to $D$, or \emph{semi-concave} \cite{GLL+17}. 
 
-\subsection{Practical QueryGAN Heuristics}
+\section{Practical QueryGAN Heuristics}
 
 \subsection{Stochastic Loss Subsampling}
-    Even if we assume that the offline optimization oracle $\O$ is in general good at optimizing non-convex functions, note that at each step $t$ $QueryGAN$ requires $\O$ to optimize over \emph{sums} of multiple highly non-convex neural networks
+    Even if we assume that the offline optimization oracle $\mathcal{O}$ is in general good at optimizing non-convex functions, note that at each step $t$ $QueryGAN$ requires $\mathcal{O}$ to optimize over \emph{sums} of multiple highly non-convex neural networks
 
     \begin{equation}
-        \sum_{t=1}^T g_t + \sigma_2^Tx 
+        \arg\min_x\sum_{t=1}^T g_t(x) + \sigma_2^Tx
     \end{equation}
 
     Thus, as $T$ grows larger in later rounds, this optimization problem becomes dramatically larger and less feasible in practice, straining our oracle assumptions. 
 
-    One might hope that we can obtain almost as good regret guarantees by instead running our oracle over a random sample of loss functions drawn from some distribution over past loss functions. \todo{Prove}
+    One might hope that we can obtain almost as good regret guarantees by instead running our oracle over a random sample of loss functions drawn from some distribution over past loss functions. 
 
+    \begin{algorithm}[H]
+        \caption{Subsampled Follow the Perturbed Leader (S-FTPL)}
+        \KwIn{Noise $\eta > 0$, Rounds $T$, Loss Distribution $L(f_{1:t})$}
+        \KwResult{Actions $x_{1:T}$}
+        \For{$t \in 1...T$}{
+            Draw i.i.d random vector $\sigma\sim Exp(\eta)^d$ \\
+
+            Sample batch of loss functions $B \sim L(f_{1:t})$\\
+            Prediction at time $t$:
+
+            \begin{equation*}
+                x_t \leftarrow \arg\min_{x \in \X} \sum_{f \in B} f(x) - \sigma^T x
+            \end{equation*}
+
+
+        }~\\
+    \end{algorithm}
+    
+    \begin{theorem}
+        If S-FTPL is instantiated with loss distribution ???, then the strategies $x_{1:t}$ ensure sublinear regret
+    \end{theorem}
+
+    \begin{proof}
+        
+    \end{proof}
 
 \subsection{QueryGAN Rejection Sampling}
 While we can prove sufficient regret bounds simply by sampling uniformly from $G_{1:t}$, this naive methods throws away valuable information. Specifically, the discriminators $D_{1:t}$ are able to evaluate the quality of a generated sample. If we train \todo{citations}

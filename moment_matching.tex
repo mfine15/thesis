@@ -37,16 +37,16 @@ its empirical estimate as
 We now let $\mathcal{F}$ be the unit ball in some reproducing kernel Hilbert space $\mathcal{H}$. By the representer theorem, there is a feature map $\phi(x)$ from $\mathcal{X}$ to $\mathbb{R}$ such that $f(x) = \langle f, \phi(x) \rangle_\mathcal{H}$. In canonical form, this feature map is $\phi(x) = k(x, \cdot)$. In this instance, we can express the MMD as the distance in $\mathcal{H}$ between mean embeddings \cite{GBR+12}.
 
 \begin{equation}
-  MMD^2[\mathcal{F}, p, q] = || \mathbb{E}_{x\sim p}[f(x)] - \mathbb{E}_{y\sim q}[f(y)] ||^2_\mathcal{H}
+  MMD^2[\mathcal{F}, p, q] = \| \mathbb{E}_{x\sim p}[f(x)] - \mathbb{E}_{y\sim q}[f(y)] \|^2_\mathcal{H}
 \end{equation}
 
 \subsubsection{Query Classes as feature maps}
 
 Using the kernel trick, we can efficiently find the function
-$f \in \mathcal{F}$ s.t $||f||_\mathcal{H} \leq 1$ that maximizes the difference :
+$f \in \mathcal{F}$ s.t $\|f\|_\mathcal{H} \leq 1$ that maximizes the difference :
 
 \[
-  ||\mathbb{E}_{x\sim p}[f(x)] - \mathbb{E}_{y\sim q}[f(y)]||_\mathcal{H}
+  \|\mathbb{E}_{x\sim p}[f(x)] - \mathbb{E}_{y\sim q}[f(y)]\|_\mathcal{H}
 \]
 
 \textbf{[TODO can't make the jump from supremum to sum]}
@@ -92,6 +92,16 @@ a
 {[}TODO all subsets kernel{]}
 
 \textbf{NOte:} A supremum of convex functions is convex
+
+\subsubsection{Moment Matching in an RKHS}
+
+What functions satisfy the MMD IPM class  $\mathcal{F}= \{f: \|f\|_\mathcal{H} \leq 1 \}$? 
+
+For some Reproducing Kernel Hilbert Space $\mathcal{H}$ for a kernel $k(\cdot,\cdot)$, the norm of a function $f \in \mathcal{H}$ is defined as 
+
+\begin{equation}
+    \| f \|^2_\mathcal{H} := \langle f, f \rangle _\mathcal{H} = \sum_{i=1}^l \sum_{j=1}^n \alpha_i^2 k(x_i, x_j) = \alpha^TK\alpha
+\end{equation}
 
 \bibliography{works-cited}
 \bibliographystyle{plain}
