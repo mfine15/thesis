@@ -116,6 +116,12 @@ John {Shawe-Taylor} and Nello Cristianini.
 \newblock Kernel {{Methods}} for {{Pattern Analysis}}.
 \newblock page 478.
 
+\bibitem[SN19]{SN19}
+Arun~Sai Suggala and Praneeth Netrapalli.
+\newblock Online {{Non}}-{{Convex Learning}}: {{Following}} the {{Perturbed
+  Leader}} is {{Optimal}}.
+\newblock {\em arXiv:1903.08110 [cs, math, stat]}, March 2019.
+
 \bibitem[Vil08]{Vil08}
 C{\'e}dric Villani.
 \newblock {\em Optimal Transport: Old and New}, volume 338.
