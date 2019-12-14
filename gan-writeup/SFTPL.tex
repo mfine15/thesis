@@ -1,0 +1,176 @@
+
+\begin{equation}
+    M(x) = \sum_{i}^n x_i + Exp(\lambda)
+\end{equation}
+
+Recall that to satisfy differential privacy, for all neighboring databases $x, x'$,
+
+\begin{equation}
+\mathbb{P}(M(x) = B) \leq e^\epsilon \mathbb{P}(M(x') = B) 
+\end{equation}
+
+But consider a database $x$ s.t $\sum_{i}^n x_i = 3$, and a neighboring database $x'$ where $\sum_{i}^n x_i' = 1$. When $B = 2$
+
+\begin{align}
+    \frac{\mathbb{P}(M(x) = B)}{\mathbb{P}(M(x') = B)} &= \frac{f(B - \sum_{i}^n x_i; \lambda)}{f(B - \sum_{i}^n x_i'; \lambda)} \\
+    &= \frac{f(-1; \lambda)}{f(1; \lambda)} \\
+    &= \frac{0}{\lambda e^{-\lambda}}
+\end{align}
+
+where $f(x;\lambda)$ is the exponential pdf. 
+
+Clearly, there is no value of $\epsilon$ or $\lambda$ s.t. $\frac{0}{\lambda e^{-\lambda}} \geq e^\epsilon$, and therefore the exponential mechanism is not $\epsilon$-DP for any value of epsilon. 
+
+\subsection{Symmetric FTPL}
+
+Instead, to ensure privacy of FTPL, we must instantiate FTPL with a symmetric distribution. One natural choice is Laplace noise, but Gaussian noise is equally plausible. We will prove accuracy, and privacy then, for a number of symmetric noise distributions
+
+\begin{algorithm}[H]
+    \caption {Follow the Symmetric Perturbed Leader (FTSPL)}
+    \KwIn{Noise distribution $p_z \in \mathbb{R}^d$, Rounds $T$, Loss Distribution $L(f_{1:t})$}
+    \KwResult{Actions $x_{1:T}$}
+    \For{$t \in 1...T$}{
+        Draw i.i.d random vector $\sigma\sim p_z$ \\
+        Prediction at time $t$:
+
+        \begin{equation*}
+            x_t \leftarrow \arg\min_{x \in \X} \sum_{f \in B} f(x) - \sigma^T x
+        \end{equation*}
+    }~\\
+\end{algorithm}
+
+We will now prove regret bounds for FTSPL. This proof draws heavily from \cite{SN19}, which used a stability argument to prove the following regret bound for non-convex FTPL with an (assymetric) exponential distribution:
+
+\begin{lemma}[Exponential Non-convex FTPL \cite{SN19}]
+    Let $D$ be the $l_\infty$ diameter of the data universe $\X$. Suppose the losses $(f_1..f_t)$ are $L-lipschitz$. If FTPL is instantiated with noise distribution $Exp(\eta)$ and an $(\alpha, \beta)-$approximate optimization oracle $\mathcal{O}$, then FTPL satisfies the following regret bound
+
+    \begin{equation}
+        \mathbb{E}\left[ \frac{1}{T}\sum_{t=1}^T f_t(x_t) - \frac{1}{T}\min_{x\in \X}\sum_{t=1}^T f_t(x) \right] \leq O(\eta d^2 D L^2 + \frac{d(\beta T + D)}{\eta T} + \alpha + \beta d L)
+    \end{equation}
+\end{lemma}
+
+
+\begin{theorem}[FTSPL Regret]\label{thm:ftspl-regret}
+    Let $D$ be the $l_\infty$ diameter of the data universe $\X$. Suppose the losses $(f_1..f_t)$ are $L-lipschitz$. If FTPL is instantiated with noise distribution $p_z$ and an $(\alpha, \beta)-$approximate optimization oracle $\mathcal{O}$, then FTSPL satisfies the following regret bound
+
+    \begin{equation}
+        TOOD
+    \end{equation}
+\end{theorem}
+Our proof follows the exact same form, only substituting in the PDF of our symmetric distribution $p_z$ for the exponential PDF where appropriate. We rely on the following two monotocity lemmas from , shown without proof as neither relies on the noise PDF, and thus are equivalent to those of \cite{SN19}. 
+
+
+
+First, let $e_i$ denote the $i^{th}$ standard basis vector and $x_{t,i}$ denote the $i^{th}$ cooridinate of $x_t$. 
+
+\begin{lemma}[Monotocity 1 \cite{SN19}]
+    Let $x_t(\sigma)$ be the prediction of FTSPL in iteration $t$ with random perturbation $\sigma$. Then, for any $c > 0$, the following monotonicity property holds
+
+    \begin{equation}
+        \mathbf{x}_{t, i}\left(\sigma+c \mathbf{e}_{i}\right) \geq \mathbf{x}_{t, i}(\sigma)-\frac{2\left(\alpha+\beta\|\sigma\|_{1}\right)}{c}-\beta
+    \end{equation}
+\end{lemma}
+
+\begin{lemma}[Monotonicity 2]
+    Let $x_t(\sigma)$ be the prediction of FTSPL in iteration $t$ with random perturbation $\sigma$. Suppose $\left\|\mathbf{x}_{t}(\sigma)-\mathbf{x}_{t+1}(\sigma)\right\|_{1} \leq 10 d \cdot\left|\mathbf{x}_{t, i}(\sigma)-\mathbf{x}_{t+1, i}(\sigma)\right|$. For $\sigma' = \sigma + 100Lde_i$, we have
+
+\begin{align*} \min \left(\mathbf{x}_{t, i}\left(\sigma^{\prime}\right), \mathbf{x}_{t+1, i}\left(\sigma^{\prime}\right)\right) \geq & \max \left(\mathbf{x}_{t, i}(\sigma), \mathbf{x}_{t+1, i}(\sigma)\right)-\frac{1}{10}\left|\mathbf{x}_{t, i}(\sigma)-\mathbf{x}_{t+1, i}(\sigma)\right| \\ &-\frac{3\left(\alpha+\beta\|\sigma\|_{1}\right)}{100 L d}-\beta \end{align*}
+\end{lemma}
+
+Using these lemmas, we present our modified proof of \ref*{thm:ftspl-regret}
+
+\paragraph{Proof of Theorem~\ref{thm:ftpl}.} We now proceed to the proof of Theorem~\ref{thm:ftpl}. We use the same notation as in Lemmas~\ref{lem:monotone1},~\ref{lem:monotone2}.
+First note that $\E{\|\x_t(\sigma)-\x_{t+1}(\sigma)\|_1}$ can be written as
+\begin{equation}
+    \label{eqn:coordinatewise}
+    \E{\norm{\x_t(\sigma)-\x_{t+1}(\sigma)}_1} = \sum_{i = 1}^d \E{|\x_{t,i}(\sigma)-\x_{t+1,i}(\sigma)|}.
+\end{equation}
+To bound $\E{\norm{\x_t(\sigma)-\x_{t+1}(\sigma)}_1}$ we derive an upper bound for \mbox{$\E{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|}, \forall i\in [d]$}. For any $i \in [d]$, define $\Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|}$ as 
+
+$$\Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|} := \E{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|\Big| \{\sigma_{j}\}_{j\neq i}},$$
+where $\sigma_j$ is the $j^{th}$ coordinate of $\sigma$.  Let $\x_{max,i}(\sigma) = \max\left(\x_{t,i}(\sigma), \x_{t+1,i}(\sigma)\right)$ and $\x_{min,i}(\sigma) = \min\left(\x_{t,i}(\sigma), \x_{t+1,i}(\sigma)\right)$. Then $\Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|} = \Eover{-1}{\x_{max,i}(\sigma)} - \Eover{-1}{\x_{min,i}(\sigma)}$. 
+%We now obtain an upper bound for the conditional expectation $\Eover{-1}[|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|]$. 
+Define  event $\mathcal{E}$ as 
+$$\mathcal{E} = \left\lbrace \sigma :\norm{\x_{t}(\sigma)-\x_{t+1}(\sigma)}_1 \leq {10  d} \cdot |\x_{t,i}(\sigma)-\x_{t+1,i}(\sigma)|\right\rbrace.$$ 
+% Then we have
+% \[
+% \E{|\x^1_i - \x^2_i|} = \E{\x_{max,i}(\sigma_i) }-\E{\x_{min,i}(\sigma_i)}.
+% \]
+Consider the following
+\begin{equation*}
+    \begin{array}{lll}
+         \Eover{-1}{\x_{min,i}(\sigma)}  &=& \Pr(\sigma_i < 100Ld) \Eover{-1}{\x_{min,i}(\sigma)|\sigma_i < 100Ld} \vspace{0.1in}\\
+         && + \Pr(\sigma_i \geq 100Ld) \Eover{-1}{\x_{min,i}(\sigma) |\sigma_i \geq 100Ld}\vspace{0.1in}\\
+         &\geq& \left(1-f_z(100Ld)\right)(\Eover{-1}{\x_{max, i}(\sigma)}-D) \vspace{0.1in}\\
+         && + f_z(100Ld)\Eover{-1}{\x_{min,i}(\sigma+100Lde_i)},
+\end{array}
+\end{equation*}
+where the last inequality follows  the fact that the domain of $i^{th}$ coordinate lies within some interval of length $D$ and since $\Eover{-1}{\x_{min,i}(\sigma)|\sigma_i < 100Ld}$ and $\Eover{-1}{\x_{max, i}(\sigma)}$ are points in this interval, their difference is bounded by $D$. We can further lower bound $\Eover{-1}{\x_{min,i}(\sigma)}$ as follows
+\begin{equation*}
+    \begin{array}{lll}
+         \Eover{-1}{\x_{min,i}(\sigma)} 
+         &\geq & \left(1-f_z(100Ld)\right)(\Eover{-1}{\x_{max, i}(\sigma)}-D)\vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E})\Eover{-1}{\x_{min,i}(\sigma+100Lde_i) | \mathcal{E}} \vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E}^c)\Eover{-1}{\x_{min,i}(\sigma+100Lde_i) | \mathcal{E}^c},
+\end{array}
+\end{equation*}
+where $\mathbb{P}_{-i}(\mathcal{E})$ is defined as $\Pr_{-i}(\mathcal{E}) := \Pr\left(\mathcal{E}\Big| \{\sigma_{j}\}_{j\neq i}\right).$ We now use the monotonicity properties proved in Lemmas~\ref{lem:monotone1},~\ref{lem:monotone2} to further lower bound $\Eover{-1}{\x_{min,i}(\sigma)}$. Let $\gamma(\sigma) = \alpha + \beta \|\sigma\|_{1}$ be the approximation error of the offline optimization oracle. Then
+\begingroup\makeatletter\def\f@size{10}\check@mathfonts
+\begin{equation*}
+    \begin{array}{lll}
+         \Eover{-1}{\x_{min,i}(\sigma)} &\geq&  \left(1-f_z(100Ld)\right)(\Eover{-1}{\x_{max, i}(\sigma)}-D)\vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E})\Eover{-1}{\x_{max,i}(\sigma) -\frac{1}{10}|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)| - \frac{3\gamma(\sigma)}{100Ld}-\beta \Big| \mathcal{E}}\vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E}^c)\Eover{-1}{\x_{min,i}(\sigma) - \frac{2\gamma(\sigma)}{100Ld}-\beta| \mathcal{E}^c}\vspace{0.1in}\\
+         &\geq& \left(1-f_z(100Ld)\right)(\Eover{-1}{\x_{max, i}(\sigma)}-D)\vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E})\Eover{-1}{\x_{max,i}(\sigma) -\frac{1}{10}|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|-\frac{3\gamma(\sigma)}{100Ld} -\beta\Big| \mathcal{E}}\vspace{0.1in}\\
+         && + f_z(100Ld)\Pr_{-i}(\mathcal{E}^c)\Eover{-1}{\x_{max,i}(\sigma)-\frac{1}{10d}\|\x_{t}(\sigma)-\x_{t+1}(\sigma)\|_1 - \frac{2\gamma(\sigma)}{100Ld} -\beta\Big| \mathcal{E}^c},
+    \end{array}
+\end{equation*}
+\endgroup
+where the first inequality follows from Lemmas~\ref{lem:monotone1},~\ref{lem:monotone2}, the second inequality follows from the definition of $\mathcal{E}^c$. Rearranging the terms in the RHS and using $\Pr_{-i}(\mathcal{E}) \leq 1$ gives us 
+\begin{equation*}
+    \begin{array}{lll}
+         \Eover{-1}{\x_{min,i}(\sigma)} &\geq&   \left(1-f_z(100Ld)\right)(\Eover{-1}{\x_{max, i}(\sigma)}-D)\vspace{0.1in}\\
+         && + f_z(100Ld)\Eover{-1}{\x_{max,i}(\sigma) - \frac{3\gamma(\sigma)}{100Ld} - \beta}\vspace{0.1in}\\
+         && - f_z(100Ld)\Eover{-1}{\frac{1}{10}|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|+\frac{1}{10d}\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1}\vspace{0.1in}\\
+
+
+         & \geq & \Eover{-1}{\x_{max, i}(\sigma)} - D - f_z(100Ld)( \frac{3\gamma(\sigma)}{100Ld} + \beta + D)\vspace{0.1in}\\
+         && - f_z(100Ld)\Eover{-1}{\frac{1}{10}|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|+\frac{1}{10d}\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1}\vspace{0.1in}\\
+
+
+        %  &\geq& (1-f_z(100Ld))\Eover{-1}{\x_{max, i}(\sigma)}  -(1-f_z(100Ld))D - \frac{3\gamma(\sigma)}{100Ld}-\beta\vspace{0.1in}\\
+        %  && - )\Eover{-1}{\frac{1}{10}|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|+\frac{1}{10d}\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1},
+    \end{array}
+\end{equation*}
+where the last inequality uses the fact that $f_z$ is always less than $1$ . Rearanging the terms in the last inequality gives us 
+\begin{equation*}
+    \begin{array}{lll}
+    \frac{f_z(100Ld)}{10} \Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|} &\leq&  \Eover{-1}{\x_{max, i}(\sigma)} - \Eover{-1}{\x_{min, i}(\sigma)}  - D \vspace{0.1in}\\
+    && - f_z(100Ld)( \Eover{-1}{\frac{3\gamma(\sigma)}{100Ld}} + \beta + D + \frac{1}{10d}\Eover{-1}{\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1}) \vspace{0.1in}\\
+    
+    \frac{f_z(100Ld) - 10}{10} \Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|} &\leq& - D - f_z(100Ld)( \Eover{-1}{\frac{3\gamma(\sigma)}{100Ld}} + \beta + D + \frac{1}{10d}\Eover{-1}{\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1}) \vspace{0.1in}\\
+
+    \Eover{-1}{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|} &\geq& \xi ( \Eover{-1}{\frac{3\gamma(\sigma)}{10Ld}} + 10\beta + 10D + \frac{D}{f_z(100Ld)} + \frac{1}{d}\Eover{-1}{\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1}) \\
+    % \frac{1}{9d}\Eover{-1}{\norm{\x_{t}(\sigma) - \x_{t+1}(\sigma)}_1}\\
+    % &\quad + \frac{1000}{9}\eta L  d D  + \frac{\Eover{-1}{\gamma(\sigma)}}{30Ld} + \frac{10}{9}\beta.
+\end{array}
+\end{equation*}
+where $\xi = \frac{f_z(100Ld)}{10 - f_z(100Ld)}$.Since the above bound holds for any $\{\sigma_j\}_{j\neq i}$, we get the following bound on the unconditioned expectation
+\begin{align*}
+\E{|\x_{t,i}(\sigma) - \x_{t+1,i}(\sigma)|}  \leq \xi ( \E{\frac{3\gamma(\sigma)}{10Ld}} + 10\beta + 10D + \frac{D}{f_z(100Ld)} + \frac{1}{d}\E{\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1})
+\end{align*}
+Plugging this in Equation~\eqref{eqn:coordinatewise} gives us the following bound on stability of predictions of FTPL
+\begin{align*}
+\E{\norm{\x_{t}(\sigma) - \x_{t+1}(\sigma)}_1} & \leq  d \cdot \xi ( \E{\frac{3\gamma(\sigma)}{10Ld}} + 10\beta + 10D + \frac{D}{f_z(100Ld)} + \frac{1}{d}\E{\|\x_{t}(\sigma) - \x_{t+1}(\sigma)\|_1})\\
+& \leq d \cdot \frac{\xi}{\xi + 1} ( \E{\frac{3\gamma(\sigma)}{10Ld}} + 10\beta + 10D + \frac{D}{f_z(100Ld)})\\
+& \leq f_z(100Ld)( \frac{3\alpha + 3\beta\E{\norm{\sigma}_1} }{100L} + \beta d + Dd) + Dd/10
+\end{align*}
+
+Plugging the above bound in Equation~\eqref{eqn:stability} gives us the following bound on regret.
+
+\begin{align}
+    \mathbb{E}\left[ \frac{1}{T}\sum_{t=1}^T f_t(x_t) - \frac{1}{T}\min_{x\in \X}\sum_{t=1}^T f_t(x) \right] &\leq \frac{1}{T}[ T (f_z(100Ld)( \frac{3\alpha + 3\beta\E{\norm{\sigma}_1} }{100L} + \beta d + Dd) + Dd/10) + TODO the other terms]\\
+  & \leq O\left( (f_z(100Ld)( \frac{\alpha + \beta\E{\norm{\sigma}_1} }{L} + \beta d + Dd) + Dd) + TODO the other terms \right)
+\end{align}
+

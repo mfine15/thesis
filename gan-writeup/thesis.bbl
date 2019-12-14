@@ -89,17 +89,6 @@ James Jordon and Jinsung Yoon.
   PRIVACY GUARANTEES}}.
 \newblock page~21, 2019.
 
-\bibitem[LSZ15]{LSZ15a}
-Yujia Li, Kevin Swersky, and Richard Zemel.
-\newblock Generative {{Moment Matching Networks}}.
-\newblock {\em arXiv:1502.02761 [cs, stat]}, February 2015.
-
-\bibitem[M{\"u}l97]{Mul97}
-Alfred M{\"u}ller.
-\newblock Integral {{Probability Metrics}} and {{Their Generating Classes}} of
-  {{Functions}}.
-\newblock {\em Advances in Applied Probability}, 29(2):429--443, 1997.
-
 \bibitem[NRVW19]{NRVW19}
 Seth Neel, Aaron Roth, Giuseppe Vietri, and Zhiwei~Steven Wu.
 \newblock Differentially {{Private Objective Perturbation}}: {{Beyond
@@ -111,30 +100,9 @@ Seth Neel, Aaron Roth, and Zhiwei~Steven Wu.
 \newblock How to {{Use Heuristics}} for {{Differential Privacy}}.
 \newblock {\em arXiv:1811.07765 [cs, stat]}, November 2018.
 
-\bibitem[SC]{SC}
-John {Shawe-Taylor} and Nello Cristianini.
-\newblock Kernel {{Methods}} for {{Pattern Analysis}}.
-\newblock page 478.
-
-\bibitem[SN19]{SN19}
-Arun~Sai Suggala and Praneeth Netrapalli.
-\newblock Online {{Non}}-{{Convex Learning}}: {{Following}} the {{Perturbed
-  Leader}} is {{Optimal}}.
-\newblock {\em arXiv:1903.08110 [cs, math, stat]}, March 2019.
-
 \bibitem[Vil08]{Vil08}
 C{\'e}dric Villani.
 \newblock {\em Optimal Transport: Old and New}, volume 338.
 \newblock {Springer Science \& Business Media}, 2008.
-
-\bibitem[ZML17]{ZML17}
-Junbo Zhao, Michael Mathieu, and Yann LeCun.
-\newblock Energy-based {{Generative Adversarial Network}}.
-\newblock {\em arXiv:1609.03126 [cs, stat]}, March 2017.
-
-\bibitem[zot]{zotero-1283}
-Two-{{Sample Tests}}, {{Integral Probability Metrics}}, and {{GAN Objectives}}.
-\newblock
-  http://www.gatsby.ucl.ac.uk/\textasciitilde{}dougals/slides/dali/\#/63.
 
 \end{thebibliography}

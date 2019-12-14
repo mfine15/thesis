@@ -1,0 +1,69 @@
+
+\subsubsection{Integral Probability Metrics}
+
+Many GAN variants can be understood as minimizing the distance between the two distributions $\p_{synth}$ and $\p_{real}$, measured by some Integral Probability Metric.
+
+\begin{definition}[Integral Probability Metric (IPM) \cite{Mul97}]
+    An IPM $\rho_\F$between two distributions $\mathbb{P}$ and $\mathbb{Q}$ is 
+
+    \begin{equation}
+        \rho_\F(\mathbb{P}, \mathbb{Q})  := \sup_{f \in \mathcal{F}} \big| \mathbb{E}_{x \sim \p}[f(X)] - \mathbb{E}_{x \sim \mathbb{Q}}[f(X)] \big|
+    \end{equation}
+
+    where $\F$ is some class of real-valued bounded measurable functions.
+\end{definition}
+
+The boundedness criteria is especially important, for if $f$ is unbounded the objective $\sup_f$ will scale $f$ to be arbritrarily large. Depending on how we constrain $\mathcal{F}$, we can recover a number of GAN architectures \cite{zotero-1283}: 
+
+\begin{itemize}
+    \item $\F = \{f: \|f\|_L \leq 1\}$ gives us Wasserstein GAN \cite{ACB17}
+    \item $\F = \{f: \|f\|_\infty \leq 1 \}$ gives us Total Variation distance, as seen is Energy Based GAN \cite{ZML17}
+    \item $\F = \{f: \|f\|_\mathcal{H} \leq 1 \}$ for some RKHS $\mathcal{H}$  gives us Maximum Mean Discrepancy, as seen in GMMN \cite{LSZ15a}
+\end{itemize}
+
+In practice, most GAN literature approximates these function class $\mathcal{F}$ through deep neural networks, rather than optimizing over all possible functions. Our aim is to choose an $\F$ (possibly specific to each set of queries) that contains most queries of interest, while still allowing for easy GAN training. 
+
+\subsubsection{Moment Matching in an RKHS}
+
+What functions satisfy the MMD IPM class  $\F = \{f \in \mathcal{H}: \|f\|_\mathcal{H} \leq 1 \}$? 
+
+For some Reproducing Kernel Hilbert Space $\mathcal{H}$ for a kernel $k(\cdot,\cdot)$, the norm of a function $f \in \mathcal{H}$ is defined as 
+
+\begin{align*}
+    \| f \|^2_\mathcal{H} &:= \langle f, f \rangle _\mathcal{H}  \\
+    &= \left \langle \sum_{i=1}^n \alpha_i \phi(x_i) , \sum_{i=1}^n \alpha_i \phi(x_i)   \right\rangle  _\mathcal{H} \\
+    &= \sum_{i=1}^n \sum_{j=1}^n \alpha_i^2 k(x_i, x_j) \\
+    &= \alpha^TK\alpha
+\end{align*}
+
+where the last equality follows from the fact that all kernel matrices are positive semidefinite. The next question to ask is what is an appropriate choice of RKHS $\mathcal{H}$? \todo{More depth}
+
+
+Consider the all-subsets kernel over a vector $x \in \B^n$, which has a feature $\phi_A$ for each product of a subset $A \subseteq \{1,2..,n\}$. 
+
+\begin{definition}[All subsets Kernel(\cite{SC})]
+    The all-subsets kernel $\phi_A$ is defined by the embedding
+    
+    \begin{equation}
+        \phi : x \to (\phi_A(x))_{A \subseteq \{1,2..,n\}}
+    \end{equation}
+
+    with the corresponding kernel $k_\subseteq(x,z)$ given by
+    
+    \begin{equation}
+        k_\subseteq(x,z) = \langle \phi(x), \phi(z) \rangle 
+    \end{equation}
+    
+    $k_\subseteq$ can be efficiently computed by
+
+    \begin{equation}
+        k_\subseteq(x,z) = \prod_{i=1}^n (1 + x_iz_i)
+    \end{equation}
+\end{definition}
+
+Thus, our function class $\mathcal{F}$ over the unit ball is 
+
+
+\begin{equation}
+    \mathcal{F} = \left\{\alpha \in \mathcal{R}^{|\X|} : \sum_{i = 1}^n \sum_{j=1}^n \alpha_i \left(\prod_{k=1}^n (1+ x_{ik}x_{jk}\right) \leq 1 \right\}
+\end{equation}
